@@ -1,34 +1,34 @@
 [
     {
-        "nombre": "Polo Estampado Azul",
+        "nombre": "Polo Clásico Blanco",
         "precio": 49.90,
-        "precio_anterior": 69.90,
-        "imagen": "imagenes/camisa01.png",
-        "label": "HOT",
-        "rating": 4
+        "precio_anterior": 65.00,
+        "imagen": "imagenes/polo01.png",
+        "label": "MAS VENDIDO",
+        "rating": 5
     },
     {
-        "nombre": "Polo Cuadros Rojo",
-        "precio": 59.00,
-        "precio_anterior": 80.00,
-        "imagen": "https://via.placeholder.com/300x300?text=Polo+Rojo",
-        "label": "BEST SELLER",
-        "rating": 5
+        "nombre": "Polo Jaspeado Verde",
+        "precio": 52.90,
+        "precio_anterior": 70.00,
+        "imagen": "imagenes/polo02.png",
+        "label": "",
+        "rating": 4
     },
     {
         "nombre": "Polo Clásico Marino",
         "precio": 54.90,
         "precio_anterior": 75.00,
-        "imagen": "https://via.placeholder.com/300x300?text=Polo+Marino",
+        "imagen": "imagenes/polo03.png",
         "label": "HOT",
         "rating": 4
     },
     {
-        "nombre": "Polo Tejido Rojo",
-        "precio": 65.00,
-        "precio_anterior": 70.00,
-        "imagen": "https://via.placeholder.com/300x300?text=Polo+Tejido",
-        "label": "BEST SELLER",
+        "nombre": "Polo Clásico Rojo",
+        "precio": 50.90,
+        "precio_anterior": 68.00,
+        "imagen": "imagenes/polo04.png",
+        "label": "",
         "rating": 4
     }
 ]

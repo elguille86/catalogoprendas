@@ -1,52 +1,64 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Catálogo de Polos</title>
-    <link rel="stylesheet" href="styles.css"/>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
+
     <header class="header">
-        <h1>✨ Nuevos Productos</h1>
+        <h1 class="section-title">✨ NUEVOS PRODUCTOS</h1>
     </header>
 
-    <section class="catalogo" id="catalogo">
-        <!-- Los productos se generarán automáticamente -->
-    </section>
+    <section class="catalogo" id="catalogo"></section>
 
     <script>
+        const CLASES_LABEL = {
+            "Más vendido": "label-venta",
+            "Destacado": "label-hot",
+            "Nuevo": "label-nuevo",
+            "Oferta": "label-oferta",
+            "Descuento": "label-descuento"
+        };
+
         async function cargarProductos() {
             try {
-                const respuesta = await fetch("productos.json");
-                const productos = await respuesta.json();
-
-                const contenedor = document.getElementById("catalogo");
+                const res = await fetch("productos.json");
+                const productos = await res.json();
+                const cont = document.getElementById("catalogo");
 
                 productos.forEach(p => {
+                    const card = document.createElement("div");
+                    card.classList.add("product-card");
 
                     const estrellas = "★".repeat(p.rating) + "☆".repeat(5 - p.rating);
+                    const labelClass = CLASES_LABEL[p.label] || "";
 
-                    const div = document.createElement("div");
-                    div.classList.add("producto");
+                    card.innerHTML = `
+                        <div class="product-label ${labelClass}">
+                            ${p.label !== "" ? p.label.toUpperCase() : ""}
+                        </div>
 
-                    div.innerHTML = `
-                        <span class="label ${p.label === 'HOT' ? 'hot' : 'best'}">${p.label}</span>
                         <img src="${p.imagen}" alt="${p.nombre}">
-                        <h3>${p.nombre}</h3>
-                        <p class="precio">
-                            <span>S/ ${p.precio.toFixed(2)}</span>
-                            <del>S/ ${p.precio_anterior.toFixed(2)}</del>
+                        
+                        <h3 class="product-name">${p.nombre}</h3>
+
+                        <p class="price">
+                            S/ ${p.precio.toFixed(2)}
+                            <span class="old-price">S/ ${p.precio_anterior.toFixed(2)}</span>
                         </p>
-                        <div class="estrellas">${estrellas}</div>
+
+                        <div class="stars">${estrellas}</div>
                     `;
 
-                    contenedor.appendChild(div);
+                    cont.appendChild(card);
                 });
 
-            } catch (error) {
-                console.error("Error cargando productos:", error);
+            } catch (e) {
+                console.error("Error cargando productos:", e);
             }
         }
 
