@@ -1,34 +1,38 @@
 [
     {
+        "id": 1,
         "nombre": "Polo Clásico Blanco",
-        "precio": 49.90,
-        "precio_anterior": 65.00,
+        "precio": 49.9,
+        "precio_anterior": 65.0,
         "imagen": "imagenes/polo01.png",
-        "label": "MAS VENDIDO",
+        "label": "Más vendido",
         "rating": 5
     },
     {
+        "id": 2,
         "nombre": "Polo Jaspeado Verde",
-        "precio": 52.90,
-        "precio_anterior": 70.00,
+        "precio": 52.9,
+        "precio_anterior": 70.0,
         "imagen": "imagenes/polo02.png",
-        "label": "",
+        "label": "Destacado",
         "rating": 4
     },
     {
+        "id": 3,
         "nombre": "Polo Clásico Marino",
-        "precio": 54.90,
-        "precio_anterior": 75.00,
+        "precio": 54.9,
+        "precio_anterior": 75.0,
         "imagen": "imagenes/polo03.png",
-        "label": "HOT",
+        "label": "Nuevo",
         "rating": 4
     },
     {
+        "id": 4,
         "nombre": "Polo Clásico Rojo",
-        "precio": 50.90,
-        "precio_anterior": 68.00,
+        "precio": 50.9,
+        "precio_anterior": 68.0,
         "imagen": "imagenes/polo04.png",
-        "label": "",
+        "label": "Oferta",
         "rating": 4
     }
 ]

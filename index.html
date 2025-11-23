@@ -1,69 +1,126 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Catálogo de Polos</title>
-    <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Catálogo de Polos</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <h1 class="brand">Catálogo de Polos</h1>
+      <div class="actions">
+        <input id="search" type="search" placeholder="Buscar polos..." aria-label="Buscar productos"/>
+      </div>
+    </div>
+  </header>
 
-    <header class="header">
-        <h1 class="section-title">✨ NUEVOS PRODUCTOS</h1>
-    </header>
+  <main class="container">
+    <section class="hero">
+      <h2 class="section-title">✨ Nuevos Productos</h2>
+      <p class="lead">Colores de tendencia, cortes cómodos y calidad premium.</p>
+    </section>
 
-    <section class="catalogo" id="catalogo"></section>
+    <section class="controls">
+      <div class="filters">
+        <label>Ordenar:
+          <select id="sort">
+            <option value="default">Recomendado</option>
+            <option value="price-asc">Precio (menor)</option>
+            <option value="price-desc">Precio (mayor)</option>
+          </select>
+        </label>
 
-    <script>
-        const CLASES_LABEL = {
-            "Más vendido": "label-venta",
-            "Destacado": "label-hot",
-            "Nuevo": "label-nuevo",
-            "Oferta": "label-oferta",
-            "Descuento": "label-descuento"
-        };
+        <label>Mostrar:
+          <select id="perpage">
+            <option>4</option>
+            <option>8</option>
+            <option>12</option>
+          </select>
+        </label>
+      </div>
+    </section>
 
-        async function cargarProductos() {
-            try {
-                const res = await fetch("productos.json");
-                const productos = await res.json();
-                const cont = document.getElementById("catalogo");
+    <section id="catalogo" class="catalogo" aria-live="polite"></section>
 
-                productos.forEach(p => {
-                    const card = document.createElement("div");
-                    card.classList.add("product-card");
+    <footer class="site-footer">
+      <p>© <span id="year"></span> Tienda de Polos · Todos los derechos reservados</p>
+    </footer>
+  </main>
 
-                    const estrellas = "★".repeat(p.rating) + "☆".repeat(5 - p.rating);
-                    const labelClass = CLASES_LABEL[p.label] || "";
+<script>
+const CLASES_LABEL = {
+    "Más vendido": "label-venta",
+    "Destacado": "label-hot",
+    "Nuevo": "label-nuevo",
+    "Oferta": "label-oferta",
+    "Descuento": "label-descuento"
+};
 
-                    card.innerHTML = `
-                        <div class="product-label ${labelClass}">
-                            ${p.label !== "" ? p.label.toUpperCase() : ""}
-                        </div>
+let productos = [];
 
-                        <img src="${p.imagen}" alt="${p.nombre}">
-                        
-                        <h3 class="product-name">${p.nombre}</h3>
+document.getElementById('year').textContent = new Date().getFullYear();
+document.getElementById('search').addEventListener('input', ()=> renderProductos());
+document.getElementById('sort').addEventListener('change', ()=> renderProductos());
+document.getElementById('perpage').addEventListener('change', ()=> renderProductos());
 
-                        <p class="price">
-                            S/ ${p.precio.toFixed(2)}
-                            <span class="old-price">S/ ${p.precio_anterior.toFixed(2)}</span>
-                        </p>
+async function cargarProductos(){
+  try{
+    const r = await fetch('productos.json');
+    productos = await r.json();
+    productos = productos.map((p,i)=> ({ id: p.id || (i+1), ...p }));
+    renderProductos();
+  }catch(e){
+    console.error('Error cargando productos', e);
+  }
+}
 
-                        <div class="stars">${estrellas}</div>
-                    `;
+function renderProductos(){
+  const cont = document.getElementById('catalogo');
+  const q = document.getElementById('search').value.toLowerCase();
+  const sort = document.getElementById('sort').value;
+  const perpage = parseInt(document.getElementById('perpage').value,10) || 8;
 
-                    cont.appendChild(card);
-                });
+  let list = productos.filter(p=>
+    p.nombre.toLowerCase().includes(q) ||
+    (p.label || '').toLowerCase().includes(q)
+  );
 
-            } catch (e) {
-                console.error("Error cargando productos:", e);
-            }
-        }
+  if(sort === 'price-asc') list.sort((a,b)=> a.precio - b.precio);
+  if(sort === 'price-desc') list.sort((a,b)=> b.precio - a.precio);
 
-        cargarProductos();
-    </script>
+  list = list.slice(0, perpage);
 
+  cont.innerHTML = '';
+  if(list.length === 0){
+    cont.innerHTML = '<p class="empty">No se encontraron productos.</p>';
+    return;
+  }
+
+  list.forEach(p=>{
+    const card = document.createElement('div');
+    card.className = 'product-card';
+
+    const labelClass = CLASES_LABEL[p.label] || '';
+    const stars = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
+
+    card.innerHTML = `
+      <div class="product-label ${labelClass}">${p.label ? p.label : ''}</div>
+      <img src="${p.imagen}" alt="${p.nombre}" loading="lazy" />
+      <h3 class="product-name">${p.nombre}</h3>
+      <p class="price">S/ ${p.precio.toFixed(2)} <span class="old-price">S/ ${p.precio_anterior.toFixed(2)}</span></p>
+      <div class="stars" aria-hidden="true">${stars}</div>
+      <div class="card-actions">
+        <a class="btn primary" href="#" style=" display: none;">Ver producto</a>
+      </div>
+    `;
+
+    cont.appendChild(card);
+  });
+}
+
+cargarProductos();
+</script>
 </body>
 </html>
